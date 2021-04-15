@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+    nodejs-nginx:
+        container_name: nodejs-nginx
+        restart: unless-stopped
+        image: nginx:1.17.8
+        ports:
+            - "81:80"
+        volumes:
+            - ./config/nginx/:/etc/nginx/conf.d/
+            - ./www:/usr/www
+        networks:
+            - nodejs-network
+    nodejs-app:
+        container_name: nodejs-app
+        restart: unless-stopped
+        image: juliocsrmf/nodejs
+        volumes:
+            - ./apps/app:/home/node/app
+        networks:
+            - nodejs-network
+networks:
+    nodejs-network:
+        driver: bridge
+        name: nodejs-network
